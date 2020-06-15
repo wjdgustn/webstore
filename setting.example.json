@@ -1,0 +1,16 @@
+{
+  "port": YOUR_PORT,
+  "usessl": false,
+  "ssl_cert" : "YOUR_SSL_CERT",
+  "ssl_key" : "YOUR_SSL_KEY",
+  "DISCORD_CLIENT_ID": "YOUR_DISCORD_APPLICATION_CLIENT_ID",
+  "DISCORD_CLIENT_SECRET": "YOUR_DISCORD_APPLICATION_CLIENT_SECRET",
+  "DISCORD_CALLBACK_URL": "/login/callback",
+  "DISCORD_SCOPE": [ "identify" ],
+  "SESSION_SECRET": "secret",
+  "index": [ "index.htm" , "index.html" ],
+  "userdatapath": "./data/user/user.json",
+  "hyonsubotdatapath": "HYONSUBOT_DATA_PATH",
+  "admin": [ "ADMIN'S DISCORD ID" ],
+  "testmode": false
+}

@@ -1,0 +1,91 @@
+<%
+if(logined) {
+    username = `${user.username}#${user.discriminator}`;
+    if(user.avatar != null) {
+        avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`;
+    }
+    else {
+        avatar = `/img/guest.png`;
+    }
+    userdata = userdb[user.id];
+    userhistory = history[user.id];
+    money = `${userdata.money}원`;
+}
+else {
+    username = `게스트`;
+    avatar = `/img/guest.png`;
+    money = `로그인 필요`;
+}
+
+function CountHistory(code) {
+    var count = 0;
+    for(var i in userhistory) {
+        if(code == userhistory[i]) count++;
+    }
+    return count;
+}
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <title>현수봇 상점</title>
+</head>
+
+<body>
+<div id="profile">
+    <img id="profile_image" src="<%=avatar%>" width="64" height="64">
+    <div id="profile_info" hidden>
+        <h3 class="profile_info_text" id="username"><%=username%></h3>
+        <p class="profile_info_text" id="money">가진 돈 : <%=money%></p>
+        <%if(logined) {%>
+            <a class="profile_info_text" id="login_logout" href="/logout">로그아웃</a>
+        <%} else {%>
+            <a class="profile_info_text" id="login_logout" href="/login">로그인</a>
+        <%}%>
+        <a class="profile_info_text" id="profile_link" href="/profile">내 정보</a>
+        <br>
+        <a class="profile_info_text" id="profile_cart" href="/cart">장바구니</a>
+        <a class="profile_info_text" id="profile_history" href="/history">구매 기록</a>
+        <%if(logined && setting.admin.indexOf(user.id) != -1) {%>
+            <br><a class="profile_info_text" id="admin_menu" href="/admin">관리자 메뉴</a>
+        <%}%>
+    </div>
+</div>
+<h1 id="main_title">현수봇 상점</h1>
+<div id="product">
+<%for(var i in product) {%>
+    <%if((product[i].left_count > 0 || product[i].buy_limit == -1) && (!logined || (CountHistory(product[i].code) < product[i].buy_limit_per_user || product[i].buy_limit_per_user == -1))) {%>
+        <div class="product">
+            <img class="product_image" src="<%=product[i].image%>" width="270" height="270">
+            <p class="product_title"><h1><%=product[i].title%></h1></p>
+            <p class="product_description"><h2><%=product[i].description%></h2></p>
+            <p class="product_price">가격 : <%=product[i].price%>원</p>
+            <%if(product[i].buy_limit == -1) {%>
+                <p class="product_limit">구매 가능 횟수 : 제한 없음</p>
+                <p class="product_limit">남은 구매 가능 횟수 : 제한 없음</p>
+            <%} else {%>
+                <p class="product_limit">구매 가능 횟수 : <%=product[i].buy_limit%>번</p>
+                <p class="product_left_count">남은 구매 가능 횟수 : <%=product[i].left_count%>번</p>
+            <%} if(product[i].buy_limit_per_user == -1) {%>
+                <p class="product_limit_per_user">1인당 구매 가능 횟수 : 제한 없음</p>
+            <%} else {%>
+                <p class="product_limit_per_user">1인당 구매 가능 횟수 : <%=product[i].buy_limit_per_user%>번</p>
+            <%}%>
+            <%if(product[i].cart_limit == -1) {%>
+                <p class="product_limit_per_user">최대 장바구니 보관 갯수 : 제한 없음</p>
+            <%} else {%>
+                <p class="product_cart_limit">최대 장바구니 보관 갯수 : <%=product[i].cart_limit%>개</p>
+            <%}%>
+            <div class="product_selected" onmouseover="this.style.backgroundColor = 'rgba(128, 128, 128, 0.5)';this.style.opacity = 1;" onmouseout="this.style.backgroundColor = 'rgba(128, 128, 128, 0)';this.style.opacity = 0;" style="opacity: 0;" onclick="AddToCart('<%=product[i].code%>');">
+                <h1 class="add_to_cart">클릭하여 장바구니에 추가</h1>
+            </div>
+        </div>
+    <%}%>
+<%}%>
+</div>
+</body>
+</html>

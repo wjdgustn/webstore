@@ -1,0 +1,52 @@
+#main_title {
+    text-align: center;
+}
+#buy {
+    margin-bottom: 20px;
+}
+#profile {
+    float: right;
+}
+#profile_image {
+    border-radius: 50%;
+    float: right;
+}
+#profile_info {
+    position: absolute;
+    top: 90px;
+    right: 10px;
+    background-color: white;
+    z-index: 1;
+    width: 200px;
+    height: 200px;
+    border-radius: 10%;
+    border: 1px solid #000000;
+    text-align: center;
+}
+.profile_info_text {
+    clear: right;
+}
+.product {
+    margin-bottom: -110px;
+    width: 30%;
+}
+.cart_title {
+    position: relative;
+    bottom: 160px;
+    left: 160px;
+}
+.cart_description {
+    position: relative;
+    bottom: 166px;
+    left: 160px;
+}
+.cart_price {
+    position: relative;
+    left: 160px;
+    bottom: 140px;
+}
+.cart_remove {
+    position: relative;
+    left: 240px;
+    bottom: 184px;
+}

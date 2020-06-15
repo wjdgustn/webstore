@@ -1,0 +1,83 @@
+<%
+if(logined) {
+    username = `${user.username}#${user.discriminator}`;
+    if(user.avatar != null) {
+        avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`;
+    }
+    else {
+        avatar = `/img/guest.png`;
+    }
+    userdata = userdb[user.id];
+    money = `${userdata.money}원`;
+    userhistory = history[user.id];
+}
+else {
+    username = `게스트`;
+    avatar = `/img/guest.png`;
+    money = `로그인 필요`;
+}
+ProductById = {}
+for(var i in product) {
+    ProductById[product[i].code] = {};
+    ProductById[product[i].code]['title'] = product[i].title;
+    ProductById[product[i].code]['description'] = product[i].description;
+    ProductById[product[i].code]['image'] = product[i].image;
+    ProductById[product[i].code]['price'] = product[i].price;
+    ProductById[product[i].code]['buy_limit'] = product[i].buy_limit;
+    ProductById[product[i].code]['buy_limit_per_user'] = product[i].buy_limit_per_user;
+    ProductById[product[i].code]['left_count'] = product[i].left_count;
+    ProductById[product[i].code]['run_command_after_buy'] = product[i].run_command_after_buy;
+}
+var total_price = 0;
+for (var i in userhistory) {
+    total_price = total_price + ProductById[userhistory[i]].price;
+}
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="/css/cart.css">
+    <title>현수봇 상점</title>
+</head>
+
+<body>
+<div id="profile">
+    <img id="profile_image" src="<%=avatar%>" width="64" height="64">
+    <div id="profile_info" hidden>
+        <h3 class="profile_info_text" id="username"><%=username%></h3>
+        <p class="profile_info_text" id="money">가진 돈 : <%=money%></p>
+        <%if(logined) {%>
+            <a class="profile_info_text" id="login_logout" href="/logout">로그아웃</a>
+        <%} else {%>
+            <a class="profile_info_text" id="login_logout" href="/login">로그인</a>
+        <%}%>
+        <a class="profile_info_text" id="profile_link" href="/profile">내 정보</a>
+        <br><a class="profile_info_text" id="profile_link" href="/">메인</a>
+        <a class="profile_info_text" id="profile_history" href="/cart">장바구니</a>
+        <%if(logined && setting.admin.indexOf(user.id) != -1) {%>
+            <br><a class="profile_info_text" id="admin_menu" href="/admin">관리자 메뉴</a>
+        <%}%>
+    </div>
+</div>
+<h1 id="main_title">구매 기록</h1>
+<%if(userhistory.length == 0) {%>
+    <h2 id="sub_title">항목 : 없음</h2>
+<%} else {%>
+    <h2 id="sub_title">항목 : <%=userhistory.length%>개</h2>
+    <h2 id="sub_title">지금까지 구매한 가격 : <%=total_price%>원</h2>
+<%}%>
+<div id="product">
+    <%for(var i in userhistory) {%>
+        <div class="product">
+            <img class="cart_image" src="<%=ProductById[userhistory[i]]['image']%>" width="128" height="128">
+            <h2 class="cart_title"><%=ProductById[userhistory[i]].title%></h2>
+            <h3 class="cart_description"><%=ProductById[userhistory[i]].description%></h3>
+            <h3 class="cart_price"><%=ProductById[userhistory[i]].price%>원</h3>
+        </div>
+    <%}%>
+</div>
+</body>
+</html>

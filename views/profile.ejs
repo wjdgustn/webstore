@@ -1,0 +1,57 @@
+<%
+if(logined) {
+    username = `${user.username}#${user.discriminator}`;
+    if(user.avatar != null) {
+        avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`;
+    }
+    else {
+        avatar = `/img/guest.png`;
+    }
+    userdata = userdb[user.id];
+    money = `${userdata.money}원`;
+}
+else {
+    username = `게스트`;
+    avatar = `/img/guest.png`;
+    money = `로그인 필요`;
+}
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <title>현수봇 상점</title>
+</head>
+
+<body>
+<div id="profile">
+    <img id="profile_image" src="<%=avatar%>" width="64" height="64">
+    <div id="profile_info" hidden>
+        <h3 class="profile_info_text" id="username"><%=username%></h3>
+        <p class="profile_info_text" id="money">가진 돈 : <%=money%></p>
+        <a class="profile_info_text" id="login_logout" href="/logout">로그아웃</a>
+        <a class="profile_info_text" id="profile_link" href="/">메인</a>
+        <br>
+        <a class="profile_info_text" id="profile_cart" href="/cart">장바구니</a>
+        <a class="profile_info_text" id="profile_history" href="/history">구매 기록</a>
+        <%if(logined && setting.admin.indexOf(user.id) != -1) {%>
+            <br><a class="profile_info_text" id="admin_menu" href="/admin">관리자 메뉴</a>
+        <%}%>
+    </div>
+</div>
+<h1>나의 정보</h1>
+<h2>가진 돈 : <%=userdata.money%>원</h2>
+<h2>나의 티어 : <%=userdata.tier%></h2>
+<h1>가진 아이템</h1>
+<h2>맛있는 젤리 : <%=userdata['1count']%>개</h2>
+<h2>주스 : <%=userdata['2count']%>개</h2>
+<h2>케익 : <%=userdata['3count']%>개</h2>
+<h2>크림 : <%=userdata['4count']%>개</h2>
+<h2>파이 : <%=userdata['5count']%>개</h2>
+<h2>쿠키 : <%=userdata['6count']%>개</h2>
+<h2>초코 : <%=userdata['7count']%>개</h2>
+</body>
+</html>
