@@ -6,6 +6,7 @@ const querystring = require('querystring');
 const passport = require('passport');
 const fs = require('fs');
 const session = require('express-session');
+const nodemailer = require('nodemailer');
 
 const setting = require('./setting.json');
 
@@ -38,6 +39,26 @@ function CountCart(cart, code) {
         }
     }
     return count;
+}
+
+function sendmail(address, title, text) {
+    var transport =  nodemailer.createTransport(setting.smtp_info);
+
+    var mailOptions = {
+        from: setting.smtp_mail_address,
+        to: address,
+        subject: title,
+        text: text
+    }
+    
+    transport.sendMail(mailOptions, function(error, info) {
+        if(error) {
+            return error;
+        }
+        else {
+            return info.response;
+        }
+    });
 }
 
 passport.serializeUser(function(user, done) {
@@ -199,6 +220,9 @@ app.get('/admin/:page', function(req, res, next) {
         case 'product':
             var product = JSON.parse(fs.readFileSync('./data/product.json'));
             res.render('admin-product', { user : req.user , product : product });
+            break;
+        case 'runcommand-help':
+            res.render('runcommand-help');
             break;
         default:
             res.redirect('/admin');
@@ -407,9 +431,11 @@ app.post('/userapi', function(req, res, next) {
                 history[req.user.id].unshift(usercart[i]);
                 if(product[item_position]['left_count'] > 0) product[item_position]['left_count'] = Number(product[item_position]['left_count']) - 1;
                 var command = ProductById[usercart[i]]['run_command_after_buy'];
-                var command = command.replace(/%%user%%/, req.user.id);
+                var command = command.split('%%name%%').join(req.user.username);
+                var command = command.split('%%id%%').join(req.user.id);
+                var command = command.split('%%email%%').join(req.user.email);
                 if(command != '' && command != null) {
-                    require("child_process").exec(command);
+                    eval(command);
                 }
             }
             fs.writeFileSync('./data/user/history.json', JSON.stringify(history));

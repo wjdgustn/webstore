@@ -24,7 +24,7 @@
             <p class="product_limit">구매 가능 횟수 : <input value="<%=product[i].buy_limit%>" type="text" name="buy_limit"></p>
             <p class="product_left_count">남은 구매 가능 횟수 : <input value="<%=product[i].left_count%>" type="text" name="left_count"></p>
             <p class="product_limit_per_user">1인당 구매 가능 횟수 : <input value="<%=product[i].buy_limit_per_user%>" type="text" name="buy_limit_per_user"></p>
-            <p class="product_limit_per_user">구매시 실행 명령어(%%user%%로 구매자 ID 넣기 가능) : <input value="<%=product[i].run_command_after_buy%>" type="text" name="run_command_after_buy"></p>
+            <p class="product_limit_per_user">구매시 실행 명령어(<a href="/admin/runcommand-help">상세 도움말</a>) : <input value="<%=product[i].run_command_after_buy%>" type="text" name="run_command_after_buy"></p>
             <p class="product_limit_per_user">최대 장바구니 보관 갯수 : <input value="<%=product[i].cart_limit%>" type="text" name="cart_limit"></p>
             <input type="submit" value="저장">
             <button type="button" onclick="deleteItem('<%=i%>');">삭제</button>
