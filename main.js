@@ -237,7 +237,7 @@ app.get('/admin/:page', function(req, res, next) {
                 res.render('admin-user-menu');
             }
             else {
-                res.render('admin-user-edit', { user : req.user , parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[req.user.id] , product : product , cart : cart , usercart : cart[req.user.id] , history : history , userhistory : history[req.user.id] });
+                res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] });
             }
             break;
         default:
