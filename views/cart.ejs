@@ -39,7 +39,7 @@ for(var i in usercart) {
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="/js/main.js"></script>
+    <script src="/js/cart.js"></script>
     <link rel="stylesheet" href="/css/cart.css">
     <title>현수봇 상점</title>
 </head>
@@ -70,6 +70,7 @@ for(var i in usercart) {
     <h2 id="sub_title">항목 : <%=usercart.length%>개</h2>
     <h2 id="sub_title">총 가격 : <%=total_price%>원</h2>
     <button id="buy">구매하기</button>
+    <button id="allclear">모두 비우기</button>
 <%}%>
 <div id="product">
     <%for(var i in usercart) {%>
