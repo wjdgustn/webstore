@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="/js/admin_product.js"></script>
+    <script src="/js/admin-product.js"></script>
     <link rel="stylesheet" href="/css/admin.css">
     <title>관리자 페이지</title>
 </head>
@@ -16,14 +16,14 @@
     <div class="product">
         <img class="product_image" src="<%=product[i].image%>" width="160" height="160">
         <form action="/setproduct/<%=product[i].code%>">
-            <p class="product_id">상품 코드(고유해야 함) : <input value="<%=product[i].code%>" type="text" name="code"></p>
+            <p class="product_id">상품 코드(고유해야 함) : <input value="<%=product[i].code%>" type="number" name="code"></p>
             <p class="product_image_set">이미지 경로 설정 : <input value="<%=product[i].image%>" type="text" name="image"></p>
             <p class="product_title">이름 : <input value="<%=product[i].title%>" type="text" name="title"></input></p>
             <p class="product_description">설명 : <input value="<%=product[i].description%>" type="text" name="description"></input></p>
-            <p class="product_price">가격 : <input value="<%=product[i].price%>" type="text" name="price"></p>
-            <p class="product_limit">구매 가능 횟수 : <input value="<%=product[i].buy_limit%>" type="text" name="buy_limit"></p>
-            <p class="product_left_count">남은 구매 가능 횟수 : <input value="<%=product[i].left_count%>" type="text" name="left_count"></p>
-            <p class="product_limit_per_user">1인당 구매 가능 횟수 : <input value="<%=product[i].buy_limit_per_user%>" type="text" name="buy_limit_per_user"></p>
+            <p class="product_price">가격 : <input value="<%=product[i].price%>" type="number" name="price"></p>
+            <p class="product_limit">구매 가능 횟수 : <input value="<%=product[i].buy_limit%>" type="number" name="buy_limit"></p>
+            <p class="product_left_count">남은 구매 가능 횟수 : <input value="<%=product[i].left_count%>" type="number" name="left_count"></p>
+            <p class="product_limit_per_user">1인당 구매 가능 횟수 : <input value="<%=product[i].buy_limit_per_user%>" type="number" name="buy_limit_per_user"></p>
             <p class="product_limit_per_user">구매시 실행 명령어(<a href="/admin/runcommand-help">상세 도움말</a>) : <textarea name="run_command_after_buy"><%=product[i].run_command_after_buy%></textarea></p>
             <p class="product_limit_per_user">최대 장바구니 보관 갯수 : <input value="<%=product[i].cart_limit%>" type="text" name="cart_limit"></p>
             <input class="product_button" type="submit" value="저장">

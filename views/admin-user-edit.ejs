@@ -1,0 +1,65 @@
+<%
+ProductById = {};
+for(var i in product) {
+    ProductById[product[i].code] = {};
+    ProductById[product[i].code]['title'] = product[i].title;
+    ProductById[product[i].code]['description'] = product[i].description;
+    ProductById[product[i].code]['image'] = product[i].image;
+    ProductById[product[i].code]['price'] = product[i].price;
+    ProductById[product[i].code]['buy_limit'] = product[i].buy_limit;
+    ProductById[product[i].code]['buy_limit_per_user'] = product[i].buy_limit_per_user;
+    ProductById[product[i].code]['left_count'] = product[i].left_count;
+    ProductById[product[i].code]['run_command_after_buy'] = product[i].run_command_after_buy;
+}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script>
+        userid = "<%=user.id%>";
+    </script>
+    <script src="/js/admin-user-edit.js"></script>
+    <link rel="stylesheet" href="/css/admin-user-edit.css">
+    <title>유저 관리 - 데이터 수정</title>
+</head>
+
+<body>
+<h1>유저 관리 - <%=parsedQuery.id%></h1>
+<%if(userdb[parsedQuery.id] == null) {%>
+    <h3>현재 존재하지 않는 사용자를 수정하고 있습니다.</h3>
+    <h3>수정시 데이터에 이 유저가 새로 추가되게 됩니다.</h3>
+<%}%>
+<form action="/edituser/<%=parsedQuery.id%>">
+    <p>가진 돈 : <input type="number" name="money" value="<%=userdata.money%>"></p>
+
+    <input type="submit" value="확인">
+
+    <p id="toggle_cart">클릭하여 장바구니 관리 펼치기</p>
+    <div id="manage_cart" hidden>
+        <%for(var i in usercart) {%>
+            <div class="product">
+                <img class="cart_image" src="<%=ProductById[usercart[i]]['image']%>" width="128" height="128">
+                <h2 class="cart_title"><%=ProductById[usercart[i]].title%></h2>
+                <h3 class="cart_description"><%=ProductById[usercart[i]].description%></h3>
+                <h3 class="cart_price"><%=ProductById[usercart[i]].price%>원</h3>
+                <button type="button" class="cart_remove" onclick="RemoveFromCart('<%=i%>');">이 항목 삭제</button>
+            </div>
+        <%}%>
+    </div>
+
+    <p id="toggle_history">클릭하여 구매 기록 관리 펼치기</p>
+    <div id="manage_history" hidden>
+        <%for(var i in userhistory) {%>
+            <div class="product">
+                <img class="cart_image" src="<%=ProductById[userhistory[i]]['image']%>" width="128" height="128">
+                <h2 class="cart_title"><%=ProductById[userhistory[i]].title%></h2>
+                <h3 class="cart_description"><%=ProductById[userhistory[i]].description%></h3>
+                <h3 class="cart_price"><%=ProductById[userhistory[i]].price%>원</h3>
+                <button type="button" class="cart_remove" onclick="RemoveFromHistory('<%=i%>');">이 항목 삭제</button>
+            </div>
+        <%}%>
+    </div>
+</form>
+</body>
+</html>

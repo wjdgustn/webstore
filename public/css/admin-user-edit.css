@@ -1,0 +1,24 @@
+.product {
+    margin-bottom: -110px;
+    width: 30%;
+}
+.cart_title {
+    position: relative;
+    bottom: 160px;
+    left: 160px;
+}
+.cart_description {
+    position: relative;
+    bottom: 166px;
+    left: 160px;
+}
+.cart_price {
+    position: relative;
+    left: 160px;
+    bottom: 140px;
+}
+.cart_remove {
+    position: relative;
+    left: 240px;
+    bottom: 184px;
+}
