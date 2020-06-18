@@ -186,7 +186,7 @@ app.get('/cart', function(req, res, next) {
     }
     fs.writeFileSync('./data/user/cart.json', JSON.stringify(cart));
 
-    res.render('cart', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , cart : cart , product : product });
+    res.render('cart', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , cart : cart , product : product , IsMobile : IsMobile(req) });
     return;
 });
 

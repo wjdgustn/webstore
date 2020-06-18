@@ -40,7 +40,11 @@ for(var i in usercart) {
 <head>
     <meta charset="utf-8">
     <script src="/js/cart.js"></script>
-    <link rel="stylesheet" href="/css/cart.css">
+    <%if(IsMobile) {%>
+        <link rel="stylesheet" href="/css/cart-mobile.css">
+    <%} else {%>
+        <link rel="stylesheet" href="/css/cart.css">
+    <%}%>
     <title>현수봇 상점</title>
 </head>
 
@@ -63,7 +67,11 @@ for(var i in usercart) {
         <%}%>
     </div>
 </div>
-<h1 id="main_title">장바구니</h1>
+<%if(IsMobile) {%>
+    <h1 id="main_title">장바구니 - 모바일</h1>
+<%} else {%>
+    <h1 id="main_title">장바구니</h1>
+<%}%>
 <%if(usercart.length == 0) {%>
     <h2 id="sub_title">항목 : 없음</h2>
 <%} else {%>

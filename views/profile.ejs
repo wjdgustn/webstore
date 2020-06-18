@@ -47,7 +47,11 @@ else {
     </div>
 </div>
 <div id="hyonsubot_info">
-    <h1>나의 현수봇 정보</h1>
+    <%if(IsMobile) {%>
+        <h1>나의 현수봇 정보 - 모바일</h1>
+    <%} else {%>
+        <h1>나의 현수봇 정보</h1>
+    <%}%>
     <h2>가진 돈 : <%=userdata.money%>원</h2>
     <h2>나의 티어 : <%=userdata.tier%></h2>
     <h1>가진 아이템</h1>

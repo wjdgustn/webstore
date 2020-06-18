@@ -1,12 +1,16 @@
 #main_title {
     text-align: center;
+    font-size: 4vh;
+}
+#sub_title {
+    font-size: 3vh;
 }
 #buy {
     margin-bottom: 20px;
 }
 #profile {
-    width: 9vh;
-    height: 9vh;
+    width: 10vh;
+    height: 10vh;
     float: right;
 }
 #profile_image {
@@ -17,12 +21,13 @@
 }
 #profile_info {
     position: absolute;
-    top: 12vh;
-    right: 10px;
+    left: 0px;
+    top: 15vh;
     background-color: white;
-    z-index: 1;
-    width: 200px;
-    height: 200px;
+    z-index: 2;
+    width: 100vw;
+    height: 100vw;
+    font-size: 5vw;
     border-radius: 10%;
     border: 1px solid #000000;
     text-align: center;
@@ -30,27 +35,39 @@
 .profile_info_text {
     clear: right;
 }
+.profile_info_text {
+    clear: right;
+}
 .product {
     margin-bottom: -110px;
-    width: 30%;
+    width: 85%;
 }
 .cart_title {
     position: relative;
     bottom: 160px;
     left: 160px;
+    font-size: 3vh;
 }
 .cart_description {
     position: relative;
     bottom: 166px;
     left: 160px;
+    font-size: 2.5vh;
 }
 .cart_price {
     position: relative;
     left: 160px;
     bottom: 140px;
+    font-size: 2.5vh;
 }
 .cart_remove {
     position: relative;
-    left: 260px;
-    bottom: 184px;
+    left: 400px;
+    bottom: 240px;
+}
+button {
+    min-width: 20vh;
+    min-height: 4vh;
+    font-size: 200%;
+    border: 1px solid #000000;
 }
