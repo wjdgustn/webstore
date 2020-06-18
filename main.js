@@ -136,7 +136,7 @@ app.get('/profile', function(req, res, next) {
     }
     var userdb = JSON.parse(fs.readFileSync(setting.hyonsubotdatapath));
 
-    res.render('profile', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting });
+    res.render('profile', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , IsMobile : IsMobile(req) });
     return;
 });
 

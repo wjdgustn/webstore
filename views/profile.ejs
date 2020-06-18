@@ -22,7 +22,11 @@ else {
 <head>
     <meta charset="utf-8">
     <script src="/js/main.js"></script>
-    <link rel="stylesheet" href="/css/main.css">
+    <%if(IsMobile) {%>
+        <link rel="stylesheet" href="/css/main-mobile.css">
+    <%} else {%>
+        <link rel="stylesheet" href="/css/main.css">
+    <%}%>
     <title>현수봇 상점</title>
 </head>
 
@@ -42,16 +46,18 @@ else {
         <%}%>
     </div>
 </div>
-<h1>나의 정보</h1>
-<h2>가진 돈 : <%=userdata.money%>원</h2>
-<h2>나의 티어 : <%=userdata.tier%></h2>
-<h1>가진 아이템</h1>
-<h2>맛있는 젤리 : <%=userdata['1count']%>개</h2>
-<h2>주스 : <%=userdata['2count']%>개</h2>
-<h2>케익 : <%=userdata['3count']%>개</h2>
-<h2>크림 : <%=userdata['4count']%>개</h2>
-<h2>파이 : <%=userdata['5count']%>개</h2>
-<h2>쿠키 : <%=userdata['6count']%>개</h2>
-<h2>초코 : <%=userdata['7count']%>개</h2>
+<div id="hyonsubot_info">
+    <h1>나의 현수봇 정보</h1>
+    <h2>가진 돈 : <%=userdata.money%>원</h2>
+    <h2>나의 티어 : <%=userdata.tier%></h2>
+    <h1>가진 아이템</h1>
+    <h2>맛있는 젤리 : <%=userdata['1count']%>개</h2>
+    <h2>주스 : <%=userdata['2count']%>개</h2>
+    <h2>케익 : <%=userdata['3count']%>개</h2>
+    <h2>크림 : <%=userdata['4count']%>개</h2>
+    <h2>파이 : <%=userdata['5count']%>개</h2>
+    <h2>쿠키 : <%=userdata['6count']%>개</h2>
+    <h2>초코 : <%=userdata['7count']%>개</h2>
+</div>
 </body>
 </html>
