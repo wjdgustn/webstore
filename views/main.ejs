@@ -37,7 +37,7 @@ function CountHistory(code) {
 
 <body>
 <div id="profile">
-    <img id="profile_image" src="<%=avatar%>" width="64" height="64">
+    <img id="profile_image" src="<%=avatar%>">
     <div id="profile_info" hidden>
         <h3 class="profile_info_text" id="username"><%=username%></h3>
         <p class="profile_info_text" id="money">가진 돈 : <%=money%></p>
@@ -56,6 +56,7 @@ function CountHistory(code) {
     </div>
 </div>
 <h1 id="main_title">현수봇 상점</h1>
+<div id="product_before"></div>
 <div id="product">
 <%for(var i in product) {%>
     <%if((product[i].left_count > 0 || product[i].buy_limit == -1) && (!logined || (CountHistory(product[i].code) < product[i].buy_limit_per_user || product[i].buy_limit_per_user == -1))) {%>

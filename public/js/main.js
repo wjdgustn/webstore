@@ -7,16 +7,6 @@ window.onload = function() {
             profile_info.hidden = true;
         }
     }
-    document.getElementById('buy').onclick = function() {
-        var result = JSON.parse(Request( "POST" , `${location.protocol}//${location.host}/userapi?action=buy` ));
-        if(result.code == 'success') {
-            alert('결제가 완료되었습니다.');
-            location.reload();
-        }
-        else {
-            alert(`결제에 실패하였습니다.\n서버 메시지 : ${result.message}`);
-        }
-    }
 }
 
 function Request(method, url) {
