@@ -204,7 +204,7 @@ app.get('/history', function(req, res, next) {
         fs.writeFileSync('./data/user/history.json', JSON.stringify(history));
     }
 
-    res.render('history', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , history : history , product : product });
+    res.render('history', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , history : history , product : product , IsMobile : IsMobile(req) });
     return;
 });
 
