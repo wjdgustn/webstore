@@ -16,11 +16,11 @@ window.onload = function() {
         var clicked = document.getElementById('toggle_history');
         var element = document.getElementById('manage_history');
         if(element.hidden) {
-            clicked.innerHTML = '클릭하여 장바구니 관리 접기';
+            clicked.innerHTML = '클릭하여 구매 기록 관리 접기';
             element.hidden = false;
         }
         else {
-            clicked.innerHTML = '클릭하여 장바구니 관리 펼치기';
+            clicked.innerHTML = '클릭하여 구매 기록 관리 펼치기';
             element.hidden = true;
         }
     }
