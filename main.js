@@ -252,7 +252,8 @@ app.get('/admin/:page', function(req, res, next) {
                 res.render('admin-user-menu', { IsMobile : IsMobile(req) });
             }
             else {
-                res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] , IsMobile : IsMobile(req) });
+                var fakeuserdata = { "money" : 0 };
+                res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] || fakeuserdata , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] , IsMobile : IsMobile(req) });
             }
             break;
         default:
