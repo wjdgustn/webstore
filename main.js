@@ -242,17 +242,17 @@ app.get('/admin/:page', function(req, res, next) {
     switch(req.params.page) {
         case 'product':
             var product = JSON.parse(fs.readFileSync('./data/product.json'));
-            res.render('admin-product', { user : req.user , product : product });
+            res.render('admin-product', { user : req.user , product : product , IsMobile : IsMobile(req) });
             break;
         case 'runcommand-help':
             res.render('runcommand-help');
             break;
         case 'user':
             if(parsedQuery.id == null || parsedQuery.id == '') {
-                res.render('admin-user-menu');
+                res.render('admin-user-menu', { IsMobile : IsMobile(req) });
             }
             else {
-                res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] });
+                res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] , IsMobile : IsMobile(req) });
             }
             break;
         default:

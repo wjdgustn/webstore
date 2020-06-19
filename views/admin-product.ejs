@@ -3,14 +3,19 @@
 <head>
     <meta charset="utf-8">
     <script src="/js/admin-product.js"></script>
-    <link rel="stylesheet" href="/css/admin.css">
+    <%if(IsMobile) {%>
+        <link rel="stylesheet" href="/css/admin-mobile.css">
+    <%} else {%>
+        <link rel="stylesheet" href="/css/admin.css">
+    <%}%>
+
     <title>관리자 페이지</title>
 </head>
 
 <body>
-<h1>판매 물건 관리</h1>
-<a href="/admin">돌아가기</a>
-<br><button onclick="CreateNew();">새로 만들기</button>
+<h1 id="main_title">판매 물건 관리</h1>
+<a href="/admin" id="go_back">돌아가기</a>
+<br><button onclick="CreateNew();" id="createnew">새로 만들기</button>
 <div id="product">
     <%for(var i in product) {%>
     <div class="product">
