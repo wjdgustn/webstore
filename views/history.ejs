@@ -39,7 +39,11 @@ for (var i in userhistory) {
 <head>
     <meta charset="utf-8">
     <script src="/js/main.js"></script>
-    <link rel="stylesheet" href="/css/cart-mobile.css">
+    <%if(IsMobile) {%>
+        <link rel="stylesheet" href="/css/cart-mobile.css">
+    <%} else {%>
+        <link rel="stylesheet" href="/css/cart.css">
+    <%}%>
     <title>현수봇 상점</title>
 </head>
 

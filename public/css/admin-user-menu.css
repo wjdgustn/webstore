@@ -1,3 +1,13 @@
+#main_title {
+    font-size: 4vh;
+}
 #input_id {
-    width: 500px;
+    width: 50vh;
+    font-size: 2vh;
+    border: 1px solid #000000;
+}
+#submit {
+    font-size: 2vh;
+    margin-left: 1vh;
+    border: 1px solid #000000;
 }

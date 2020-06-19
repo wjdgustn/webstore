@@ -12,23 +12,26 @@
     position: relative;
     bottom: 160px;
     left: 160px;
+    font-size: 3vh;
 }
 .cart_description {
     position: relative;
     bottom: 166px;
     left: 160px;
+    font-size: 2.5vh;
 }
 .cart_price {
     position: relative;
     left: 160px;
     bottom: 140px;
+    font-size: 2.5vh;
 }
-.cart_remove {
+.remove_button {
     position: relative;
-    left: 240px;
-    bottom: 184px;
+    left: 400px;
+    bottom: 240px;
 }
-#money_edit, #save_data, p {
+#money_edit, #save_data, .remove_button, p {
     font-size: 2vh;
 }
 #money_edit, #save_data {

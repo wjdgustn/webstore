@@ -20,20 +20,24 @@ for(var i in product) {
         userid = "<%=parsedQuery.id%>";
     </script>
     <script src="/js/admin-user-edit.js"></script>
-    <link rel="stylesheet" href="/css/admin-user-edit.css">
+    <%if(IsMobile) {%>
+        <link rel="stylesheet" href="/css/admin-user-edit-mobile.css">
+    <%} else {%>
+        <link rel="stylesheet" href="/css/admin-user-edit.css">
+    <%}%>
     <title>유저 관리 - 데이터 수정</title>
 </head>
 
 <body>
-<h1>유저 관리 - <%=parsedQuery.id%></h1>
+<h1 id="main_title">유저 관리 - <%=parsedQuery.id%></h1>
 <%if(userdb[parsedQuery.id] == null) {%>
-    <h3>현재 존재하지 않는 사용자를 수정하고 있습니다.</h3>
-    <h3>수정시 데이터에 이 유저가 새로 추가되게 됩니다.</h3>
+    <h3 class="no_exist_user">현재 존재하지 않는 사용자를 수정하고 있습니다.</h3>
+    <h3 class="no_exist_user">수정시 데이터에 이 유저가 새로 추가되게 됩니다.</h3>
 <%}%>
 <form action="/edituser/<%=parsedQuery.id%>">
-    <p>가진 돈 : <input type="number" name="money" value="<%=userdata.money%>"></p>
+    <p>가진 돈 : <input id="money_edit" type="number" name="money" value="<%=userdata.money%>"></p>
 
-    <input type="submit" value="확인">
+    <input id="save_data" type="submit" value="확인">
 
     <p id="toggle_cart">클릭하여 장바구니 관리 펼치기</p>
     <div id="manage_cart" hidden>
@@ -43,7 +47,7 @@ for(var i in product) {
                 <h2 class="cart_title"><%=ProductById[usercart[i]].title%></h2>
                 <h3 class="cart_description"><%=ProductById[usercart[i]].description%></h3>
                 <h3 class="cart_price"><%=ProductById[usercart[i]].price%>원</h3>
-                <button type="button" class="cart_remove" onclick="RemoveFromCart('<%=i%>');">이 항목 삭제</button>
+                <button type="button" class="cart_remove remove_button" onclick="RemoveFromCart('<%=i%>');">이 항목 삭제</button>
             </div>
         <%}%>
     </div>
@@ -56,7 +60,7 @@ for(var i in product) {
                 <h2 class="cart_title"><%=ProductById[userhistory[i]].title%></h2>
                 <h3 class="cart_description"><%=ProductById[userhistory[i]].description%></h3>
                 <h3 class="cart_price"><%=ProductById[userhistory[i]].price%>원</h3>
-                <button type="button" class="cart_remove" onclick="RemoveFromHistory('<%=i%>');">이 항목 삭제</button>
+                <button type="button" class="history_remove remove_button" onclick="RemoveFromHistory('<%=i%>');">이 항목 삭제</button>
             </div>
         <%}%>
     </div>
