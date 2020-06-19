@@ -62,7 +62,11 @@ for (var i in userhistory) {
         <%}%>
     </div>
 </div>
-<h1 id="main_title">구매 기록</h1>
+<%if(IsMobile) {%>
+    <h1 id="main_title">구매 기록 - 모바일</h1>
+<%} else {%>
+    <h1 id="main_title">구매 기록</h1>
+<%}%>
 <%if(userhistory.length == 0) {%>
     <h2 id="sub_title">항목 : 없음</h2>
 <%} else {%>
