@@ -4,8 +4,8 @@ const https = require('https');
 const url = require('url');
 const querystring = require('querystring');
 const passport = require('passport');
-const fs = require('fs');
 const session = require('express-session');
+const fs = require('fs');
 const nodemailer = require('nodemailer');
 
 const setting = require('./setting.json');
@@ -71,13 +71,6 @@ function IsMobile(req) {
     }
 }
 
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});
-passport.deserializeUser(function(obj, done) {
-    done(null, obj);
-});
-
 app.use(session({
     secret: setting.SESSION_SECRET,
     resave: false,
@@ -86,7 +79,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-require('./DiscordStrategy')(passport);
 
 const staticoptions = {
     index: setting.index
@@ -714,29 +706,11 @@ app.get('/edituser/:id', function(req, res, next) {
     return;
 });
 
-app.get('/login', passport.authenticate('discord'), function() {
-    return;
-});
-
-app.get('/logout', function(req, res, next) {
-    req.logout();
-    res.redirect('/');
-    return;
-});
-
-app.get(setting.DISCORD_CALLBACK_URL, passport.authenticate('discord', {
-    failureRedirect: '/loginfail'
-}), function(req, res) {
-    parsedUrl = url.parse(req.url);
-    parsedQuery = querystring.parse(parsedUrl.query,'&','=');
-    res.redirect('/');
-    return;
-});
-
-app.get('/loginfail', function(req, res, next) {
-    res.send('<h1>로그인 실패!</h1><h2>로그인에 실패하였습니다. <a href="/login">이곳</a>을 클릭해 다시 시도할 수 있습니다.</h2>');
-    return;
-});
+var filelist = fs.readdirSync('./routes');
+for(var i in filelist) {
+    app.use(require('./routes/' + filelist[i]));
+    console.log(`${filelist[i]} 라우터를 불러왔습니다.`);
+}
 
 app.use(function(req, res, next) {
     res.status(404).send(`<h1>${url.parse(req.url).pathname}을(를) 찾을 수 없습니다.</h1>`);
