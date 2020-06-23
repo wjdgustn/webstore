@@ -1,3 +1,6 @@
+console.log('서버 시작을 준비하고 있습니다...\n');
+
+console.log('모듈 불러오는 중...');
 const express = require('express');
 const http = require('http');
 const https = require('https');
@@ -7,8 +10,11 @@ const passport = require('passport');
 const session = require('express-session');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
+console.log('모듈을 불러왔습니다.\n');
 
+console.log('설정 불러오는 중...');
 const setting = require('./setting.json');
+console.log('설정을 불러왔습니다.\n');
 
 const app = express();
 
@@ -97,287 +103,6 @@ app.use(function(req, res, next) {
     else {
         next();
     }
-});
-
-app.get('/', function(req, res, next) {
-    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
-    var product = JSON.parse(fs.readFileSync('./data/product.json'));
-    var history = JSON.parse(fs.readFileSync('./data/user/history.json'));
-
-    if(req.isAuthenticated() && userdb[req.user.id] == null) {
-        userdb[req.user.id] = {};
-    }
-    if(req.isAuthenticated() && userdb[req.user.id]['money'] == null) {
-        userdb[req.user.id]['money'] = 0;
-    }
-    fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
-
-    if(IsMobile(req)) {
-        res.render('main-mobile', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , product : product , history : history });
-    }
-    else {
-        res.render('main', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , product : product , history : history });
-    }
-    return;
-});
-
-app.get('/profile', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    var userdb = JSON.parse(fs.readFileSync(setting.hyonsubotdatapath));
-
-    res.render('profile', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , IsMobile : IsMobile(req) });
-    return;
-});
-
-app.get('/cart', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
-    var cart = JSON.parse(fs.readFileSync('./data/user/cart.json'));
-    var product = JSON.parse(fs.readFileSync('./data/product.json'));
-    var history = JSON.parse(fs.readFileSync('./data/user/history.json'));
-
-    if(cart[req.user.id] == null) {
-        res.redirect('/');
-        return;
-    }
-    if(cart[req.user.id].length == 0) {
-        res.redirect('/');
-        return;
-    }
-
-    ProductById = {};
-    for(var i in product) {
-        ProductById[product[i].code] = {};
-        ProductById[product[i].code]['code'] = product[i].code;
-        ProductById[product[i].code]['title'] = product[i].title;
-        ProductById[product[i].code]['description'] = product[i].description;
-        ProductById[product[i].code]['image'] = product[i].image;
-        ProductById[product[i].code]['price'] = product[i].price;
-        ProductById[product[i].code]['buy_limit'] = product[i].buy_limit;
-        ProductById[product[i].code]['buy_limit_per_user'] = product[i].buy_limit_per_user;
-        ProductById[product[i].code]['left_count'] = product[i].left_count;
-        ProductById[product[i].code]['run_command_after_buy'] = product[i].run_command_after_buy;
-        ProductById[product[i].code]['cart_limit'] = product[i].cart_limit;
-    }
-
-    for(var i in cart[req.user.id]) {
-        if (cart[req.user.id] != null && (ProductById[cart[req.user.id][i]]['left_count'] <= 0 && ProductById[cart[req.user.id][i]]['left_count'] != -1) || (CountHistory(history[req.user.id], cart[req.user.id][i]) >= ProductById[cart[req.user.id][i]]['buy_limit_per_user'] && ProductById[cart[req.user.id][i]]['buy_limit_per_user'] != -1)) {
-            cart[req.user.id].splice(i, 1);
-        }
-    }
-    for(var i in cart[req.user.id]) {
-        if(cart[req.user.id][i] == null) {
-            cart[req.user.id].splice(i, 1);
-        }
-    }
-    fs.writeFileSync('./data/user/cart.json', JSON.stringify(cart));
-
-    res.render('cart', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , cart : cart , product : product , IsMobile : IsMobile(req) });
-    return;
-});
-
-app.get('/history', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
-    var history = JSON.parse(fs.readFileSync('./data/user/history.json'));
-    var product = JSON.parse(fs.readFileSync('./data/product.json'));
-
-    if(history[req.user.id] == null) {
-        history[req.user.id] = [];
-        fs.writeFileSync('./data/user/history.json', JSON.stringify(history));
-    }
-
-    res.render('history', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , history : history , product : product , IsMobile : IsMobile(req) });
-    return;
-});
-
-app.get('/admin', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
-        return;
-    }
-
-    res.render('admin', { user : req.user });
-});
-
-app.get('/admin/:page', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
-        return;
-    }
-
-    parsedUrl = url.parse(req.url);
-    parsedQuery = querystring.parse(parsedUrl.query,'&','=');
-
-    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
-    var product = JSON.parse(fs.readFileSync('./data/product.json'));
-    var cart = JSON.parse(fs.readFileSync('./data/user/cart.json'));
-    var history = JSON.parse(fs.readFileSync('./data/user/history.json'));
-
-    switch(req.params.page) {
-        case 'product':
-            var product = JSON.parse(fs.readFileSync('./data/product.json'));
-            res.render('admin-product', { user : req.user , product : product , IsMobile : IsMobile(req) });
-            break;
-        case 'runcommand-help':
-            res.render('runcommand-help');
-            break;
-        case 'user':
-            if(parsedQuery.id == null || parsedQuery.id == '') {
-                res.render('admin-user-menu', { IsMobile : IsMobile(req) });
-            }
-            else {
-                var fakeuserdata = { "money" : 0 };
-                res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] || fakeuserdata , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] , IsMobile : IsMobile(req) });
-            }
-            break;
-        default:
-            res.redirect('/admin');
-    }
-    return;
-});
-
-app.get('/getuserinfo/:type/:id', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.status(403).send({ "code" : "error" , "message" : "로그인이 필요합니다." });
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.status(403).send({ "code" : "error" , "message" : "권한이 없습니다." });
-        return;
-    }
-
-    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
-    var product = JSON.parse(fs.readFileSync('./data/product.json'));
-    var cart = JSON.parse(fs.readFileSync('./data/user/cart.json'));
-    var history = JSON.parse(fs.readFileSync('./data/user/history.json'));
-
-    switch(req.params.type) {
-        case 'cart':
-            if(cart[req.params.id] == null) {
-                res.json({ "code" : "error" , "message" : "존재하지 않는 유저입니다."});
-            }
-            else {
-                res.json(cart[req.params.id]);
-            }
-            break;
-        case 'history':
-            if(history[req.params.id] == null) {
-                res.json({ "code" : "error" , "message" : "존재하지 않는 유저입니다." });
-            }
-            else {
-                res.json(history[req.params.id]);
-            }
-            break;
-        default:
-            res.json({ "code" : "error" , "message" : "존재하지 않는 타입입니다." });
-    }
-    return;
-});
-
-app.get('/setproduct/:itemcode', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
-        return;
-    }
-
-    var product = JSON.parse(fs.readFileSync('./data/product.json'));
-    var item_position = -1;
-    for(var i in product) {
-        if(product[i].code == req.params.itemcode) {
-            item_position = i;
-            break;
-        }
-    }
-    if(item_position == -1) {
-        res.send('<h1>설정에 실패하였습니다.</h1><h2>실패 사유 : 존재하지 않는 아이템 코드</h2><a href="/admin/product">돌아가기</a>');
-    }
-
-    parsedUrl = url.parse(req.url);
-    parsedQuery = querystring.parse(parsedUrl.query,'&','=');
-
-    product[item_position]['code'] = parsedQuery.code;
-    product[item_position]['image'] = parsedQuery.image;
-    product[item_position]['title'] = parsedQuery.title;
-    product[item_position]['description'] = parsedQuery.description;
-    product[item_position]['price'] = Number(parsedQuery.price);
-    product[item_position]['buy_limit'] = Number(parsedQuery.buy_limit);
-    product[item_position]['left_count'] = Number(parsedQuery.left_count);
-    product[item_position]['buy_limit_per_user'] = Number(parsedQuery.buy_limit_per_user);
-    product[item_position]['run_command_after_buy'] = parsedQuery.run_command_after_buy;
-    product[item_position]['cart_limit'] = Number(parsedQuery.cart_limit);
-
-    fs.writeFileSync('./data/product.json', JSON.stringify(product));
-    res.redirect('/admin/product');
-});
-
-app.get('/createproduct/:itemcode', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
-        return;
-    }
-
-    var product = JSON.parse(fs.readFileSync('./data/product.json'));
-
-    product.push({});
-    product[product.length - 1]['code'] = req.params.itemcode;
-    product[product.length - 1]['image'] = `이미지 URL을 입력해 주세요.`;
-    product[product.length - 1]['title'] = `상품 이름을 입력해 주세요.`;
-    product[product.length - 1]['description'] = `상품 설명을 입력해 주세요.`;
-    product[product.length - 1]['price'] = 0;
-    product[product.length - 1]['buy_limit'] = 0;
-    product[product.length - 1]['left_count'] = 0;
-    product[product.length - 1]['buy_limit_per_user'] = -1;
-    product[product.length - 1]['run_command_after_buy'] = ``;
-    product[product.length - 1]['cart_limit'] = -1;
-
-    fs.writeFileSync('./data/product.json', JSON.stringify(product));
-    res.redirect('/admin/product');
-    return;
-});
-
-app.get('/removeproduct/:itemcode', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
-        return;
-    }
-
-    var product = JSON.parse(fs.readFileSync('./data/product.json'));
-    console.log(JSON.stringify(product));
-    product.splice(Number(req.params.itemcode), 1);
-    console.log(JSON.stringify(product));
-    fs.writeFileSync('./data/product.json', JSON.stringify(product));
-    res.redirect('/admin/product');
-    return;
 });
 
 app.post('/userapi', function(req, res, next) {
@@ -706,11 +431,13 @@ app.get('/edituser/:id', function(req, res, next) {
     return;
 });
 
+console.log('라우터를 불러오는 중...');
 var filelist = fs.readdirSync('./routes');
 for(var i in filelist) {
     app.use(require('./routes/' + filelist[i]));
     console.log(`${filelist[i]} 라우터를 불러왔습니다.`);
 }
+console.log('라우터를 모두 불러왔습니다.\n')
 
 app.use(function(req, res, next) {
     res.status(404).send(`<h1>${url.parse(req.url).pathname}을(를) 찾을 수 없습니다.</h1>`);
