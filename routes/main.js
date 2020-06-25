@@ -1,6 +1,4 @@
 const express = require('express');
-const url = require('url');
-const querystring = require('querystring');
 const fs = require('fs');
 
 const setting = require('../setting.json');

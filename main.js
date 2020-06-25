@@ -5,11 +5,9 @@ const express = require('express');
 const http = require('http');
 const https = require('https');
 const url = require('url');
-const querystring = require('querystring');
 const passport = require('passport');
 const session = require('express-session');
 const fs = require('fs');
-const nodemailer = require('nodemailer');
 console.log('모듈을 불러왔습니다.\n');
 
 console.log('설정 불러오는 중...');
@@ -18,8 +16,7 @@ console.log('설정을 불러왔습니다.\n');
 
 const app = express();
 
-var protocol = "";
-
+var protocol;
 if(setting.usessl) {
     protocol = "https://";
     options = {
