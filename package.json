@@ -1,21 +1,21 @@
 {
-  "name": "hyonsubot-webstore",
+  "name": "webstore",
   "version": "0.0.1",
-  "description": "A webstore for hyonsubot.",
+  "description": "A webstore server.",
   "main": "main.js",
   "scripts": {
     "test": "node main.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wjdgustn/hyonsubot-webstore.git"
+    "url": "git+https://github.com/wjdgustn/webstore.git"
   },
   "author": "Hyonsu",
   "license": "AGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/wjdgustn/hyonsubot-webstore/issues"
+    "url": "https://github.com/wjdgustn/webstore/issues"
   },
-  "homepage": "https://github.com/wjdgustn/hyonsubot-webstore#readme",
+  "homepage": "https://github.com/wjdgustn/webstore#readme",
   "dependencies": {
     "ejs": "^3.1.3",
     "express": "^4.17.1",
