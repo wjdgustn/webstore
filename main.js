@@ -17,6 +17,7 @@ console.log('설정을 불러왔습니다.\n');
 const app = express();
 
 var protocol;
+
 if(setting.usessl) {
     protocol = "https://";
     options = {
