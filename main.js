@@ -18,15 +18,17 @@ console.log('설정을 불러왔습니다.\n');
 
 const app = express();
 
+var protocol = "";
+
 if(setting.usessl) {
-    protocol = "https://"
+    protocol = "https://";
     options = {
         cert: fs.readFileSync(setting.ssl_cert),
         key: fs.readFileSync(setting.ssl_key)
     }
 }
 else {
-    protocol = "http://"
+    protocol = "http://";
 }
 
 app.use(session({
