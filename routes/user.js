@@ -35,17 +35,6 @@ function IsMobile(req) {
     }
 }
 
-app.get('/profile', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    var userdb = JSON.parse(fs.readFileSync(setting.hyonsubotdatapath));
-
-    res.render('profile', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , IsMobile : IsMobile(req) });
-    return;
-});
-
 app.get('/cart', function(req, res, next) {
     if(!req.isAuthenticated()) {
         res.redirect('/login');

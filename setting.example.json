@@ -12,7 +12,6 @@
 
   "index": [ "index.htm" , "index.html" ],
   "userdatapath": "./data/user/user.json",
-  "hyonsubotdatapath": "HYONSUBOT_DATA_PATH",
   "admin": [ "ADMIN'S DISCORD ID" ],
   "testmode": false,
 
