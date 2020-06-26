@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const setting = require('../setting.json');
 
-const fun = require('../function/function.js');
+const utils = require('../utils');
 
 const app = express.Router();
 
@@ -39,7 +39,7 @@ app.get('/cart', function(req, res, next) {
     }
 
     for(var i in cart[req.user.id]) {
-        if (cart[req.user.id] != null && (ProductById[cart[req.user.id][i]]['left_count'] <= 0 && ProductById[cart[req.user.id][i]]['left_count'] != -1) || (fun.CountHistory(history[req.user.id], cart[req.user.id][i]) >= ProductById[cart[req.user.id][i]]['buy_limit_per_user'] && ProductById[cart[req.user.id][i]]['buy_limit_per_user'] != -1)) {
+        if (cart[req.user.id] != null && (ProductById[cart[req.user.id][i]]['left_count'] <= 0 && ProductById[cart[req.user.id][i]]['left_count'] != -1) || (utils.CountHistory(history[req.user.id], cart[req.user.id][i]) >= ProductById[cart[req.user.id][i]]['buy_limit_per_user'] && ProductById[cart[req.user.id][i]]['buy_limit_per_user'] != -1)) {
             cart[req.user.id].splice(i, 1);
         }
     }
@@ -51,7 +51,7 @@ app.get('/cart', function(req, res, next) {
 
     fs.writeFileSync('./data/user/cart.json', JSON.stringify(cart));
 
-    res.render('cart', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , cart : cart , product : product , IsMobile : fun.IsMobile(req) });
+    res.render('cart', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , cart : cart , product : product , IsMobile : utils.IsMobile(req) });
     return;
 });
 
@@ -69,7 +69,7 @@ app.get('/history', function(req, res, next) {
         fs.writeFileSync('./data/user/history.json', JSON.stringify(history));
     }
 
-    res.render('history', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , history : history , product : product , IsMobile : fun.IsMobile(req) });
+    res.render('history', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , history : history , product : product , IsMobile : utils.IsMobile(req) });
     return;
 });
 

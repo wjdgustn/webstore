@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const setting = require('../setting.json');
 
-const fun = require('../function/function.js');
+const utils = require('../utils');
 
 const app = express.Router();
 
@@ -23,7 +23,7 @@ app.get('/', function(req, res, next) {
 
     fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
 
-    if(fun.IsMobile(req)) {
+    if(utils.IsMobile(req)) {
         res.render('main-mobile', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , product : product , history : history });
     }
     else {
