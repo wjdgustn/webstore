@@ -1,1 +1,1 @@
-[]
+[{"code":"1","title":"테스트 상품","description":"테스트용 1번 상품입니다.","image":"/img/guest.png","price":1000,"buy_limit":10,"buy_limit_per_user":1,"left_count":0,"run_command_after_buy":"","cart_limit":-1}]

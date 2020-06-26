@@ -5,45 +5,9 @@ const fs = require('fs');
 
 const setting = require('../setting.json');
 
+const fun = require('../function/function.js');
+
 const app = express.Router();
-
-function CountHistory(history, code) {
-    var count = 0;
-    for(var i in history) {
-        if(code == history[i]) count++;
-    }
-    return count;
-}
-
-function CountCart(cart, code) {
-    var count = 0;
-    for(var i in cart) {
-        if(cart[i] == code) {
-            count++;
-        }
-    }
-    return count;
-}
-
-function sendmail(address, title, text) {
-    var transport =  nodemailer.createTransport(setting.smtp_info);
-
-    var mailOptions = {
-        from: setting.smtp_mail_address,
-        to: address,
-        subject: title,
-        text: text
-    }
-
-    transport.sendMail(mailOptions, function(error, info) {
-        if(error) {
-            return error;
-        }
-        else {
-            return info.response;
-        }
-    });
-}
 
 app.post('/userapi', function(req, res, next) {
     if(!req.isAuthenticated()) {
@@ -87,11 +51,11 @@ app.post('/userapi', function(req, res, next) {
                 res.json({ "code" : "error" , "message" : "잘못된 아이템 코드입니다." });
                 break;
             }
-            if(!(ProductById[parsedQuery.itemcode]['left_count'] > 0 || ProductById[parsedQuery.itemcode]['buy_limit'] == -1) || !CountHistory(ProductById[parsedQuery.itemcode]['code']) < ProductById[parsedQuery.itemcode]['buy_limit_per_user']) {
+            if(!(ProductById[parsedQuery.itemcode]['left_count'] > 0 || ProductById[parsedQuery.itemcode]['buy_limit'] == -1) || !fun.CountHistory(ProductById[parsedQuery.itemcode]['code']) < ProductById[parsedQuery.itemcode]['buy_limit_per_user']) {
                 res.json({ "code" : "error" , "message" : "잘못된 접근입니다.\n버그라고 생각된다면 관리자에게 문의하세요." });
                 break;
             }
-            if(CountCart(cart[req.user.id], parsedQuery.itemcode) >= ProductById[parsedQuery.itemcode]['cart_limit'] && ProductById[parsedQuery.itemcode]['cart_limit'] != -1) {
+            if(fun.CountCart(cart[req.user.id], parsedQuery.itemcode) >= ProductById[parsedQuery.itemcode]['cart_limit'] && ProductById[parsedQuery.itemcode]['cart_limit'] != -1) {
                 res.json({ "code" : "error" , "message" : "이 상품을 장바구니에 담을 수 있는 한도를 초과하였습니다." });
                 break;
             }
@@ -130,7 +94,7 @@ app.post('/userapi', function(req, res, next) {
             var total_price = 0;
 
             for(var i in usercart) {
-                if((ProductById[usercart[i]]['left_count'] > 0 || ProductById[usercart[i]].buy_limit == -1) && (CountHistory(history[req.user.id], usercart[i]) < ProductById[usercart[i]]['buy_limit_per_user'] || ProductById[usercart[i]]['buy_limit_per_user'] == -1)) {
+                if((ProductById[usercart[i]]['left_count'] > 0 || ProductById[usercart[i]].buy_limit == -1) && (fun.CountHistory(history[req.user.id], usercart[i]) < ProductById[usercart[i]]['buy_limit_per_user'] || ProductById[usercart[i]]['buy_limit_per_user'] == -1)) {
                     total_price = total_price + ProductById[usercart[i]].price;
                 }
                 else {

@@ -4,7 +4,7 @@
   "description": "A webstore server.",
   "main": "main.js",
   "scripts": {
-    "test": "node main.js"
+    "start": "node ."
   },
   "repository": {
     "type": "git",
