@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer')
 
-const setting = require('./setting.json');
+const setting = require('../setting.json');
 
 module.exports.CountHistory = function(history, code) {
     var count = 0;
