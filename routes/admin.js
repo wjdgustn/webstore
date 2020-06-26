@@ -187,9 +187,7 @@ app.get('/removeproduct/:itemcode', function(req, res, next) {
     }
 
     var product = JSON.parse(fs.readFileSync('./data/product.json'));
-    console.log(JSON.stringify(product));
     product.splice(Number(req.params.itemcode), 1);
-    console.log(JSON.stringify(product));
     fs.writeFileSync('./data/product.json', JSON.stringify(product));
     res.redirect('/admin/product');
     return;
