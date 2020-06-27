@@ -58,7 +58,6 @@ for (var i in userhistory) {
         <%} else {%>
             <a class="profile_info_text" id="login_logout" href="/login">로그인</a>
         <%}%>
-        <a class="profile_info_text" id="profile_link" href="/profile">내 정보</a>
         <br><a class="profile_info_text" id="profile_link" href="/">메인</a>
         <a class="profile_info_text" id="profile_history" href="/cart">장바구니</a>
         <%if(logined && setting.admin.indexOf(user.id) != -1) {%>
