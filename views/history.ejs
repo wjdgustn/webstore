@@ -60,7 +60,7 @@ for (var i in userhistory) {
         <%}%>
         <br><a class="profile_info_text" id="profile_link" href="/">메인</a>
         <a class="profile_info_text" id="profile_history" href="/cart">장바구니</a>
-        <%if(logined && setting.admin.indexOf(user.id) != -1) {%>
+        <%if(logined && checkAdmin) {%>
             <br><a class="profile_info_text" id="admin_menu" href="/admin">관리자 메뉴</a>
         <%}%>
     </div>

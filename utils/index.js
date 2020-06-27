@@ -1,4 +1,5 @@
-const nodemailer = require('nodemailer')
+const fs = require('fs');
+const nodemailer = require('nodemailer');
 
 const setting = require('../setting.json');
 
@@ -48,4 +49,34 @@ module.exports.sendmail = function(address, title, text) {
             return info.response;
         }
     });
+}
+
+module.exports.checkPermission = function(req, res, permission) {
+    if(!req.isAuthenticated()) {
+        return { result : false , msg : "LOGIN" };
+    }
+
+    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
+    var permission_group = JSON.parse(fs.readFileSync('./data/permission.json'));
+
+    var user_permission = userdb[req.user.id]['permission'];
+    var user_permission_group = userdb[req.user.id]['permission_group'];
+
+    if(setting.admin.indexOf(req.user.id) != -1) {
+        return { "result" : true , "msg" : "GLOBAL_ADMIN" };
+    }
+    console.log(user_permission_group);
+    for(var i in user_permission_group) {
+        console.log(user_permission_group[i]);
+        if(permission_group[user_permission_group[i]]['permission'].indexOf(permission) != -1) {
+            return { "result" : true , "msg" : "HAVE_PERMISSION_IN_GROUP" };
+        }
+    }
+    console.log(user_permission);
+    for(var i in user_permission) {
+        if(user_permission[i] == permission) {
+            return { "result" : true , "msg" : "HAVE_PERMISSION_IN_USER" };
+        }
+    }
+    return { "result" : false , "msg" : "NO_PERMISSION" };
 }

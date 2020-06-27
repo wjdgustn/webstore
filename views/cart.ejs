@@ -61,7 +61,7 @@ for(var i in usercart) {
         <%}%>
         <br><a class="profile_info_text" id="profile_link" href="/">메인</a>
         <a class="profile_info_text" id="profile_history" href="/history">구매 기록</a>
-        <%if(logined && setting.admin.indexOf(user.id) != -1) {%>
+        <%if(logined && checkAdmin) {%>
             <br><a class="profile_info_text" id="admin_menu" href="/admin">관리자 메뉴</a>
         <%}%>
     </div>

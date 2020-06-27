@@ -24,10 +24,10 @@ app.get('/', function(req, res, next) {
     fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
 
     if(utils.IsMobile(req)) {
-        res.render('main-mobile', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , product : product , history : history });
+        res.render('main-mobile', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , product : product , history : history , checkAdmin : utils.checkPermission(req, res, "ACCESS_ADMIN_PAGE").result });
     }
     else {
-        res.render('main', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , product : product , history : history });
+        res.render('main', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , product : product , history : history , checkAdmin : utils.checkPermission(req, res, "ACCESS_ADMIN_PAGE").result });
     }
     return;
 });

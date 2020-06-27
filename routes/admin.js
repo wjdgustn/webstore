@@ -10,12 +10,16 @@ const utils = require('../utils');
 const app = express.Router();
 
 app.get('/admin', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
+    var check = utils.checkPermission(req, res, "ACCESS_ADMIN_PAGE");
+    console.log(check);
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
         return;
     }
 

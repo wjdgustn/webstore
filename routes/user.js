@@ -51,7 +51,7 @@ app.get('/cart', function(req, res, next) {
 
     fs.writeFileSync('./data/user/cart.json', JSON.stringify(cart));
 
-    res.render('cart', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , cart : cart , product : product , IsMobile : utils.IsMobile(req) });
+    res.render('cart', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , cart : cart , product : product , IsMobile : utils.IsMobile(req) , checkAdmin : utils.checkPermission(req, res, "ACCESS_ADMIN_PAGE").result });
     return;
 });
 
@@ -69,7 +69,7 @@ app.get('/history', function(req, res, next) {
         fs.writeFileSync('./data/user/history.json', JSON.stringify(history));
     }
 
-    res.render('history', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , history : history , product : product , IsMobile : utils.IsMobile(req) });
+    res.render('history', { user : req.user , logined : req.isAuthenticated() , userdb : userdb , setting : setting , history : history , product : product , IsMobile : utils.IsMobile(req) , checkAdmin : utils.checkPermission(req, res, "ACCESS_ADMIN_PAGE").result });
     return;
 });
 
