@@ -34,3 +34,8 @@
 #money_edit, #save_data {
     border: 1px solid #000000;
 }
+.history_remove {
+    position: relative;
+    top: 2vh;
+    left: 30vh;
+}
