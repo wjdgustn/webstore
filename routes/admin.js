@@ -58,7 +58,7 @@ app.get('/admin/:page', function(req, res, next) {
             }
             else {
                 var fakeuserdata = { "money" : 0 };
-                res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] || fakeuserdata , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] , IsMobile : IsMobile(req) });
+                res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] || fakeuserdata , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] , IsMobile : utils.IsMobile(req) });
             }
             break;
         default:
