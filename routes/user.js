@@ -8,8 +8,15 @@ const utils = require('../utils');
 const app = express.Router();
 
 app.get('/cart', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
+    var check = utils.checkPermission(req, res, "ACCESS_CART");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
         return;
     }
     var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
@@ -56,8 +63,15 @@ app.get('/cart', function(req, res, next) {
 });
 
 app.get('/history', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
+    var check = utils.checkPermission(req, res, "ACCESS_HISTORY");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
         return;
     }
     var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));

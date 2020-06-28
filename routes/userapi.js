@@ -38,6 +38,11 @@ app.post('/userapi', function(req, res, next) {
 
     switch(parsedQuery.action) {
         case 'addcart':
+            var check = utils.checkPermission(req, res, "ADD_PRODUCT_TO_CART");
+            if(!check.result) {
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nADD_PRODUCT_TO_CART 권한이 필요합니다." });
+                return;
+            }
             itemcode_list = [];
             for(var i in product) {
                 itemcode_list.push(product[i].code);
@@ -67,6 +72,11 @@ app.post('/userapi', function(req, res, next) {
             res.json({ "code" : "success" });
             break;
         case 'removecart':
+            var check = utils.checkPermission(req, res, "REMOVE_PRODUCT_FROM_CART");
+            if(!check.result) {
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nREMOVE_PRODUCT_FROM_CART 권한이 필요합니다." });
+                return;
+            }
             if(parsedQuery.itemcode == null) {
                 res.json({ "code" : "error" , "message" : "아이템 코드가 누락되었습니다." });
                 break;
@@ -80,6 +90,11 @@ app.post('/userapi', function(req, res, next) {
             res.json({ "code" : "success" });
             break;
         case 'buy':
+            var check = utils.checkPermission(req, res, "BUY_PRODUCT");
+            if(!check.result) {
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nBUY_PRODUCT 권한이 필요합니다." });
+                return;
+            }
             if(cart[req.user.id] == null || cart[req.user.id].length == 0) {
                 res.json({ "code" : "error" , "message" : "장바구니가 비어 있습니다." });
                 break;
@@ -142,6 +157,11 @@ app.post('/userapi', function(req, res, next) {
 
             break;
         case 'allclearcart':
+            var check = utils.checkPermission(req, res, "ALL_CLEAR_CART");
+            if(!check.result) {
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nALL_CLEAR_CART 권한이 필요합니다." });
+                return;
+            }
             cart[req.user.id] = [];
             fs.writeFileSync('./data/user/cart.json', JSON.stringify(cart));
             res.json({ "code" : "success" });
