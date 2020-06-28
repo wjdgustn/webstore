@@ -36,6 +36,6 @@
 }
 .history_remove {
     position: relative;
-    top: 2vh;
     left: 30vh;
+    bottom: 19vh;
 }
