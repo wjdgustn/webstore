@@ -28,10 +28,10 @@
     left: 240px;
     bottom: 184px;
 }
-#money_edit, #save_data, p {
+#money_edit, .save_data, p {
     font-size: 2vh;
 }
-#money_edit, #save_data {
+#money_edit, .save_data {
     border: 1px solid #000000;
 }
 .history_remove {

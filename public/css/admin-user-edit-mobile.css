@@ -31,9 +31,9 @@
     left: 400px;
     bottom: 240px;
 }
-#money_edit, #save_data, .remove_button, p {
+#money_edit, .save_data, .remove_button, p {
     font-size: 2vh;
 }
-#money_edit, #save_data {
+#money_edit, .save_data {
     border: 1px solid #000000;
 }
