@@ -547,6 +547,10 @@ app.get('/removepermissiongroup/:group', function(req, res, next) {
     }
 
     var permission = JSON.parse(fs.readFileSync('./data/permission.json'));
+    if(permission[req.params.group]['default']) {
+        res.send(`<h1><a href="javascript:history.back();">기본 시스템 권한 그룹은 삭제할 수 없습니다. 이곳을 클릭해 돌아가세요.</a></h1>`);
+        return;
+    }
 
     delete permission[req.params.group];
 
