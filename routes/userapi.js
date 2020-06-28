@@ -157,9 +157,9 @@ app.post('/userapi', function(req, res, next) {
 
             break;
         case 'allclearcart':
-            var check = utils.checkPermission(req, res, "ALL_CLEAR_CART");
+            var check = utils.checkPermission(req, res, "CLEAR_CART");
             if(!check.result) {
-                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nALL_CLEAR_CART 권한이 필요합니다." });
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nCLEAR_CART 권한이 필요합니다." });
                 return;
             }
             cart[req.user.id] = [];
