@@ -11,7 +11,6 @@ const app = express.Router();
 
 app.get('/admin', function(req, res, next) {
     var check = utils.checkPermission(req, res, "ACCESS_ADMIN_PAGE");
-    console.log(check);
     if(!check.result) {
         switch(check.msg) {
             case "LOGIN":
@@ -31,10 +30,6 @@ app.get('/admin/:page', function(req, res, next) {
         res.redirect('/login');
         return;
     }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
-        return;
-    }
 
     parsedUrl = url.parse(req.url);
     parsedQuery = querystring.parse(parsedUrl.query,'&','=');
@@ -46,13 +41,31 @@ app.get('/admin/:page', function(req, res, next) {
 
     switch(req.params.page) {
         case 'product':
+            var check = utils.checkPermission(req, res, "ACCESS_MANAGE_PRODUCT");
+            if(!check.result) {
+                res.redirect('/');
+                return;
+            }
+
             var product = JSON.parse(fs.readFileSync('./data/product.json'));
             res.render('admin-product', { user : req.user , product : product , IsMobile : utils.IsMobile(req) });
             break;
         case 'runcommand-help':
+            var check = utils.checkPermission(req, res, "ACCESS_RUN_COMMAND_HELP");
+            if(!check.result) {
+                res.redirect('/');
+                return;
+            }
+
             res.render('runcommand-help');
             break;
         case 'user':
+            var check = utils.checkPermission(req, res, "ACCESS_MANAGE_USER");
+            if(!check.result) {
+                res.redirect('/');
+                return;
+            }
+
             if(parsedQuery.id == null || parsedQuery.id == '') {
                 res.render('admin-user-menu', { IsMobile : utils.IsMobile(req) });
             }
@@ -68,12 +81,15 @@ app.get('/admin/:page', function(req, res, next) {
 });
 
 app.get('/getuserinfo/:type/:id', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.status(403).send({ "code" : "error" , "message" : "로그인이 필요합니다." });
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.status(403).send({ "code" : "error" , "message" : "권한이 없습니다." });
+    var check = utils.checkPermission(req, res, "ACCESS_USER_DATA");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.status(403).send({ "code" : "error" , "message" : "로그인이 필요합니다." });
+                break;
+            default:
+                res.status(403).send({ "code" : "error" , "message" : "권한이 없습니다." });
+        }
         return;
     }
 
@@ -106,12 +122,15 @@ app.get('/getuserinfo/:type/:id', function(req, res, next) {
 });
 
 app.get('/setproduct/:itemcode', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
+    var check = utils.checkPermission(req, res, "EDIT_PRODUCT");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
         return;
     }
 
@@ -146,12 +165,15 @@ app.get('/setproduct/:itemcode', function(req, res, next) {
 });
 
 app.get('/createproduct/:itemcode', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
+    var check = utils.checkPermission(req, res, "CREATE_PRODUCT");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
         return;
     }
 
@@ -174,12 +196,15 @@ app.get('/createproduct/:itemcode', function(req, res, next) {
 });
 
 app.get('/removeproduct/:itemcode', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
+    var check = utils.checkPermission(req, res, "REMOVE_PRODUCT");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
         return;
     }
 
@@ -193,10 +218,6 @@ app.get('/removeproduct/:itemcode', function(req, res, next) {
 app.post('/adminuserapi/:id', function(req, res, next) {
     if(!req.isAuthenticated()) {
         res.json({ "code" : "error" , "message" : "로그인이 필요합니다." });
-        return;
-    }
-    if(setting.admin.indexOf(req.params.id) == -1) {
-        res.redirect('/');
         return;
     }
 
@@ -224,6 +245,11 @@ app.post('/adminuserapi/:id', function(req, res, next) {
 
     switch(parsedQuery.action) {
         case 'addcart':
+            var check = utils.checkPermission(req, res, "ADD_PRODUCT_TO_CART_USER");
+            if(!check.result) {
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nADD_PRODUCT_TO_CART_USER 권한이 필요합니다." });
+                return;
+            }
             itemcode_list = [];
             for(var i in product) {
                 itemcode_list.push(product[i].code);
@@ -253,6 +279,11 @@ app.post('/adminuserapi/:id', function(req, res, next) {
             res.json({ "code" : "success" });
             break;
         case 'removecart':
+            var check = utils.checkPermission(req, res, "REMOVE_PRODUCT_FROM_CART_USER");
+            if(!check.result) {
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nREMOVE_PRODUCT_FROM_CART_USER 권한이 필요합니다." });
+                return;
+            }
             if(parsedQuery.itemcode == null) {
                 res.json({ "code" : "error" , "message" : "아이템 코드가 누락되었습니다." });
                 break;
@@ -266,6 +297,11 @@ app.post('/adminuserapi/:id', function(req, res, next) {
             res.json({ "code" : "success" });
             break;
         case 'buy':
+            var check = utils.checkPermission(req, res, "BUY_PRODUCT_USER");
+            if(!check.result) {
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nBUY_PRODUCT_USER 권한이 필요합니다." });
+                return;
+            }
             if(cart[req.params.id] == null || cart[req.params.id].length == 0) {
                 res.json({ "code" : "error" , "message" : "장바구니가 비어 있습니다." });
                 break;
@@ -328,6 +364,11 @@ app.post('/adminuserapi/:id', function(req, res, next) {
 
             break;
         case 'removehistory':
+            var check = utils.checkPermission(req, res, "REMOVE_USER_HISTORY");
+            if(!check.result) {
+                res.json({ "code" : "error" , "message" : "권한이 없습니다.\nREMOVE_USER_HISTORY 권한이 필요합니다." });
+                return;
+            }
             if(parsedQuery.code == null) {
                 res.json({ "code" : "error" , "message" : "코드가 누락되었습니다." });
                 break;
@@ -346,13 +387,16 @@ app.post('/adminuserapi/:id', function(req, res, next) {
     return;
 });
 
-app.get('/edituser/:id', function(req, res, next) {
-    if(!req.isAuthenticated()) {
-        res.redirect('/login');
-        return;
-    }
-    if(setting.admin.indexOf(req.user.id) == -1) {
-        res.redirect('/');
+app.get('/editmoney/:id', function(req, res, next) {
+    var check = utils.checkPermission(req, res, "CONTROL_USER_MONEY");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
         return;
     }
 
