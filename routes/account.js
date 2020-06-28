@@ -3,6 +3,7 @@ const passport = require('passport');
 const session = require('express-session');
 const url = require('url');
 const querystring = require('querystring');
+const fs = require('fs');
 
 const setting = require('../setting.json');
 
@@ -40,6 +41,22 @@ app.get(setting.DISCORD_CALLBACK_URL, passport.authenticate('discord', {
 }), function(req, res) {
     parsedUrl = url.parse(req.url);
     parsedQuery = querystring.parse(parsedUrl.query,'&','=');
+
+    var userdb = JSON.parse(fs.readFileSync('./data/user/user.json'));
+    if(userdb[req.user.id] == null) {
+        userdb[req.user.id] = {};
+    }
+    if(userdb[req.user.id]['money'] == null) {
+        userdb[req.user.id]['money'] = 0;
+    }
+    if(userdb[req.user.id]['permission'] == null) {
+        userdb[req.user.id]['permission'] = [];
+    }
+    if(userdb[req.user.id]['permission_group'] == null) {
+        userdb[req.user.id]['permission_group'] = ["user"];
+    }
+    fs.writeFileSync('./data/user/user.json', JSON.stringify(userdb));
+
     res.redirect('/');
     return;
 });
