@@ -67,7 +67,7 @@ app.get('/admin/:page', function(req, res, next) {
                 return;
             }
 
-            res.render('runcommand-help');
+            res.render('permission-help');
             break;
         case 'user':
             var check = utils.checkPermission(req, res, "ACCESS_MANAGE_USER");
