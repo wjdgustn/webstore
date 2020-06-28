@@ -65,14 +65,11 @@ module.exports.checkPermission = function(req, res, permission) {
     if(setting.admin.indexOf(req.user.id) != -1) {
         return { "result" : true , "msg" : "GLOBAL_ADMIN" };
     }
-    console.log(user_permission_group);
     for(var i in user_permission_group) {
-        console.log(user_permission_group[i]);
         if(permission_group[user_permission_group[i]]['permission'].indexOf(permission) != -1) {
             return { "result" : true , "msg" : "HAVE_PERMISSION_IN_GROUP" };
         }
     }
-    console.log(user_permission);
     for(var i in user_permission) {
         if(user_permission[i] == permission) {
             return { "result" : true , "msg" : "HAVE_PERMISSION_IN_USER" };
