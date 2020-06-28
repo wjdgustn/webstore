@@ -36,6 +36,7 @@ app.get('/admin/:page', function(req, res, next) {
 
     var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
     var product = JSON.parse(fs.readFileSync('./data/product.json'));
+    var permission = JSON.parse(fs.readFileSync('./data/permission.json'));
     var cart = JSON.parse(fs.readFileSync('./data/user/cart.json'));
     var history = JSON.parse(fs.readFileSync('./data/user/history.json'));
 
@@ -59,6 +60,15 @@ app.get('/admin/:page', function(req, res, next) {
 
             res.render('runcommand-help');
             break;
+        case 'permission-help':
+            var check = utils.checkPermission(req, res, "ACCESS_PERMISSION_HELP");
+            if(!check.result) {
+                res.redirect('/');
+                return;
+            }
+
+            res.render('runcommand-help');
+            break;
         case 'user':
             var check = utils.checkPermission(req, res, "ACCESS_MANAGE_USER");
             if(!check.result) {
@@ -70,8 +80,23 @@ app.get('/admin/:page', function(req, res, next) {
                 res.render('admin-user-menu', { IsMobile : utils.IsMobile(req) });
             }
             else {
-                var fakeuserdata = { "money" : 0 };
+                var fakeuserdata = { "money" : 0 , "permission" : [] , "permission_group" : [] };
                 res.render('admin-user-edit', { parsedQuery : parsedQuery , userdb : userdb , userdata : userdb[parsedQuery.id] || fakeuserdata , product : product , cart : cart , usercart : cart[parsedQuery.id] , history : history , userhistory : history[parsedQuery.id] , IsMobile : utils.IsMobile(req) });
+            }
+            break;
+        case 'permission_group':
+            var check = utils.checkPermission(req, res, "ACCESS_MANAGE_PERMISSION_GROUP");
+            if(!check.result) {
+                res.redirect('/');
+                return;
+            }
+
+            if(parsedQuery.group == null || parsedQuery.group == '') {
+                res.render('admin-permission-group-menu', { IsMobile : utils.IsMobile(req) });
+            }
+            else {
+                var fakepermission = { "permission" : [] }
+                res.render('admin-permission-group-edit', { parsedQuery : parsedQuery , permission : permission , thispermission : permission[parsedQuery.group] || fakepermission , IsMobile : utils.IsMobile(req) });
             }
             break;
         default:
@@ -388,7 +413,7 @@ app.post('/adminuserapi/:id', function(req, res, next) {
 });
 
 app.get('/editmoney/:id', function(req, res, next) {
-    var check = utils.checkPermission(req, res, "CONTROL_USER_MONEY");
+    var check = utils.checkPermission(req, res, "CONTROL_MONEY");
     if(!check.result) {
         switch(check.msg) {
             case "LOGIN":
@@ -415,6 +440,118 @@ app.get('/editmoney/:id', function(req, res, next) {
 
     res.redirect(`/admin/user?id=${req.params.id}`);
     return;
+});
+
+app.get('/edituserpermission/:id', function(req, res, next) {
+    var check = utils.checkPermission(req, res, "CONTROL_PERMISSION");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
+        return;
+    }
+
+    parsedUrl = url.parse(req.url);
+    parsedQuery = querystring.parse(parsedUrl.query,'&','=');
+
+    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
+
+    if(userdb[req.params.id] == null) {
+        userdb[req.params.id] = {};
+    }
+
+    userdb[req.params.id]['permission'] = parsedQuery.permission.split('\r\n');
+
+    fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
+
+    res.redirect(`/admin/user?id=${req.params.id}`);
+    return;
+});
+
+app.get('/edituserpermissiongroup/:id', function(req, res, next) {
+    var check = utils.checkPermission(req, res, "CONTROL_PERMISSION_GROUP");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
+        return;
+    }
+
+    parsedUrl = url.parse(req.url);
+    parsedQuery = querystring.parse(parsedUrl.query,'&','=');
+
+    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
+
+    if(userdb[req.params.id] == null) {
+        userdb[req.params.id] = {};
+    }
+
+    userdb[req.params.id]['permission_group'] = parsedQuery.permission.split('\r\n');
+
+    fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
+
+    res.redirect(`/admin/user?id=${req.params.id}`);
+    return;
+});
+
+app.get('/editpermissiongroup/:group', function(req, res, next) {
+    var check = utils.checkPermission(req, res, "EDIT_PERMISSION_GROUP");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
+        return;
+    }
+
+    var permission = JSON.parse(fs.readFileSync('./data/permission.json'));
+
+    parsedUrl = url.parse(req.url);
+    parsedQuery = querystring.parse(parsedUrl.query,'&','=');
+
+    if(permission[req.params.group] == null) {
+        permission[req.params.group] = {};
+    }
+    if(permission[req.params.group]['permission'] == null) {
+        permission[req.params.group]['permission'] = [];
+    }
+
+    permission[req.params.group]['permission'] = parsedQuery.permission.split('\r\n');
+
+    fs.writeFileSync('./data/permission.json', JSON.stringify(permission));
+    res.redirect(`/admin/permission_group?group=${req.params.group}`);
+});
+
+app.get('/removepermissiongroup/:group', function(req, res, next) {
+    var check = utils.checkPermission(req, res, "REMOVE_PERMISSION_GROUP");
+    if(!check.result) {
+        switch(check.msg) {
+            case "LOGIN":
+                res.redirect('/login');
+                break;
+            default:
+                res.redirect('/');
+        }
+        return;
+    }
+
+    var permission = JSON.parse(fs.readFileSync('./data/permission.json'));
+
+    delete permission[req.params.group];
+
+    fs.writeFileSync('./data/permission.json', JSON.stringify(permission));
+    res.redirect(`/admin/permission_group?group=${req.params.group}`);
 });
 
 module.exports = app;

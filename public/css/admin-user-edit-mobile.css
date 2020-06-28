@@ -31,9 +31,16 @@
     left: 400px;
     bottom: 240px;
 }
-#money_edit, .save_data, .remove_button, p {
+#money_edit, .save_data, .remove_button, #remove_group,  p {
     font-size: 2vh;
 }
 #money_edit, .save_data {
     border: 1px solid #000000;
+}
+#remove_group {
+    margin-top: 1vh;
+}
+#permission_edit {
+    width: 500px;
+    height: 300px;
 }

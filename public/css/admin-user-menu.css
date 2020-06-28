@@ -1,7 +1,7 @@
 #main_title {
     font-size: 4vh;
 }
-#input_id {
+#input_id, #input_group {
     width: 50vh;
     font-size: 2vh;
     border: 1px solid #000000;

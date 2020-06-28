@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script>
+        groupname = "<%=parsedQuery.group%>";
+    </script>
+    <script src="/js/admin-permission-group-edit.js"></script>
+    <%if(IsMobile) {%>
+        <link rel="stylesheet" href="/css/admin-user-edit-mobile.css">
+    <%} else {%>
+        <link rel="stylesheet" href="/css/admin-user-edit.css">
+    <%}%>
+    <title>권한 그룹 관리 - 그룹 수정</title>
+</head>
+
+<body>
+<h1 id="main_title">그룹 수정 - <%=parsedQuery.group%></h1>
+<%if(permission[parsedQuery.group] == null) {%>
+    <h3 class="no_exist_user">현재 존재하지 않는 그룹을 수정하고 있습니다.</h3>
+    <h3 class="no_exist_user">수정시 데이터에 이 그룹이 새로 추가되게 됩니다.</h3>
+<%}%>
+<form action="/editpermissiongroup/<%=parsedQuery.group%>">
+    <p>그룹 권한 : <textarea id="permission_edit" type="text" name="permission"><%=thispermission.permission.join('\n')%></textarea></p>
+
+    <input class="save_data" type="submit" value="확인">
+</form>
+
+<%if(permission[parsedQuery.group] != null) {%>
+    <button id="remove_group">이 그룹 삭제</button>
+<%}%>
+</body>
+</html>

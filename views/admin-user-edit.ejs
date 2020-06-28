@@ -37,33 +37,45 @@ for(var i in product) {
 <form action="/editmoney/<%=parsedQuery.id%>">
     <p>가진 돈 : <input id="money_edit" type="number" name="money" value="<%=userdata.money%>"></p>
 
-    <input id="save_data" type="submit" value="확인">
+    <input class="save_data" type="submit" value="확인">
 </form>
 
-    <p id="toggle_cart">클릭하여 장바구니 관리 펼치기</p>
-    <div id="manage_cart" hidden>
-        <%for(var i in usercart) {%>
-            <div class="product">
-                <img class="cart_image" src="<%=ProductById[usercart[i]]['image']%>" width="128" height="128">
-                <h2 class="cart_title"><%=ProductById[usercart[i]].title%></h2>
-                <h3 class="cart_description"><%=ProductById[usercart[i]].description%></h3>
-                <h3 class="cart_price"><%=ProductById[usercart[i]].price%>원</h3>
-                <button type="button" class="cart_remove remove_button" onclick="RemoveFromCart('<%=i%>');">이 항목 삭제</button>
-            </div>
-        <%}%>
-    </div>
+<form action="/edituserpermission/<%=parsedQuery.id%>">
+    <p>권한 : <textarea id="permission_edit" type="text" name="permission"><%=userdata.permission.join('\n')%></textarea></p>
 
-    <p id="toggle_history">클릭하여 구매 기록 관리 펼치기</p>
-    <div id="manage_history" hidden>
-        <%for(var i in userhistory) {%>
-            <div class="product">
-                <img class="cart_image" src="<%=ProductById[userhistory[i]]['image']%>" width="128" height="128">
-                <h2 class="cart_title"><%=ProductById[userhistory[i]].title%></h2>
-                <h3 class="cart_description"><%=ProductById[userhistory[i]].description%></h3>
-                <h3 class="cart_price"><%=ProductById[userhistory[i]].price%>원</h3>
-                <button type="button" class="history_remove remove_button" onclick="RemoveFromHistory('<%=i%>');">이 항목 삭제</button>
-            </div>
-        <%}%>
-    </div>
+    <input class="save_data" type="submit" value="확인">
+</form>
+
+<form action="/edituserpermissiongroup/<%=parsedQuery.id%>">
+    <p>권한 그룹 : <textarea id="permission_group_edit" type="text" name="permission_group"><%=userdata.permission_group.join('\n')%></textarea></p>
+
+    <input class="save_data" type="submit" value="확인">
+</form>
+
+<p id="toggle_cart">클릭하여 장바구니 관리 펼치기</p>
+<div id="manage_cart" hidden>
+    <%for(var i in usercart) {%>
+        <div class="product">
+            <img class="cart_image" src="<%=ProductById[usercart[i]]['image']%>" width="128" height="128">
+            <h2 class="cart_title"><%=ProductById[usercart[i]].title%></h2>
+            <h3 class="cart_description"><%=ProductById[usercart[i]].description%></h3>
+            <h3 class="cart_price"><%=ProductById[usercart[i]].price%>원</h3>
+            <button type="button" class="cart_remove remove_button" onclick="RemoveFromCart('<%=i%>');">이 항목 삭제</button>
+        </div>
+    <%}%>
+</div>
+
+<p id="toggle_history">클릭하여 구매 기록 관리 펼치기</p>
+<div id="manage_history" hidden>
+    <%for(var i in userhistory) {%>
+        <div class="product">
+            <img class="cart_image" src="<%=ProductById[userhistory[i]]['image']%>" width="128" height="128">
+            <h2 class="cart_title"><%=ProductById[userhistory[i]].title%></h2>
+            <h3 class="cart_description"><%=ProductById[userhistory[i]].description%></h3>
+            <h3 class="cart_price"><%=ProductById[userhistory[i]].price%>원</h3>
+            <button type="button" class="history_remove remove_button" onclick="RemoveFromHistory('<%=i%>');">이 항목 삭제</button>
+        </div>
+    <%}%>
+</div>
 </body>
 </html>

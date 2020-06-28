@@ -31,11 +31,18 @@
 #money_edit, .save_data, p {
     font-size: 2vh;
 }
-#money_edit, .save_data {
+#money_edit, .save_data, #remove_group {
     border: 1px solid #000000;
 }
 .history_remove {
     position: relative;
     left: 30vh;
     bottom: 19vh;
+}
+#remove_group {
+    margin-top: 1vh;
+}
+#permission_edit {
+    width: 500px;
+    height: 300px;
 }
