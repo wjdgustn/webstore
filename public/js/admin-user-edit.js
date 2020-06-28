@@ -28,9 +28,11 @@ window.onload = function() {
     if(location.hash != '') {
         switch(location.hash) {
             case '#opencart':
+                document.getElementById('toggle_history').innerHTML = '클릭하여 장바구니 관리 접기';
                 document.getElementById('manage_cart').hidden = false;
                 break;
             case '#openhistory':
+                document.getElementById('toggle_history').innerHTML = '클릭하여 구매 기록 관리 접기';
                 document.getElementById('manage_history').hidden = false;
                 break;
         }
