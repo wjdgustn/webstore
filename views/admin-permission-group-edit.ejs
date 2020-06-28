@@ -20,6 +20,7 @@
     <h3 class="no_exist_user">현재 존재하지 않는 그룹을 수정하고 있습니다.</h3>
     <h3 class="no_exist_user">수정시 데이터에 이 그룹이 새로 추가되게 됩니다.</h3>
 <%}%>
+<p><a href="/admin/permission-help">권한 목록 보기</a></p>
 <form action="/editpermissiongroup/<%=parsedQuery.group%>">
     <p>그룹 권한 : <textarea id="permission_edit" type="text" name="permission"><%=thispermission.permission.join('\n')%></textarea></p>
 
