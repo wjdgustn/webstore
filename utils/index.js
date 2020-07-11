@@ -1,5 +1,6 @@
 const fs = require('fs');
 const nodemailer = require('nodemailer');
+const axios = require('axios');
 
 const setting = require('../setting.json');
 
@@ -76,4 +77,13 @@ module.exports.checkPermission = function(req, res, permission) {
         }
     }
     return { "result" : false , "msg" : "NO_PERMISSION" };
+}
+
+module.exports.http = function(method, url) {
+    let result;
+
+    return axios({
+        method: method,
+        url: url
+    });
 }
