@@ -36,6 +36,7 @@ for(var i in product) {
 <%}%>
 <form action="/editmoney/<%=parsedQuery.id%>">
     <p>가진 돈 : <input id="money_edit" type="number" name="money" value="<%=userdata.money%>"></p>
+    <p>마인크래프트 닉네임 : <input id="mc_nick_edit" type="text" name="mcnick" value="<%=userdata.mcnick%>"></p>
 
     <input class="save_data" type="submit" value="확인">
 </form>

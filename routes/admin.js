@@ -435,6 +435,7 @@ app.get('/editmoney/:id', function(req, res, next) {
     }
 
     userdb[req.params.id]['money'] = Number(parsedQuery.money);
+    userdb[req.params.id]['mcnick'] = parsedQuery.mcnick;
 
     fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
 

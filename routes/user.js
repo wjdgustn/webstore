@@ -87,4 +87,13 @@ app.get('/history', function(req, res, next) {
     return;
 });
 
+app.get('/mcnick', function(req, res, next) {
+    if(!req.isAuthenticated()) {
+        res.redirect('/login');
+        return;
+    }
+
+    res.render('set-mcnick');
+});
+
 module.exports = app;

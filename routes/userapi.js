@@ -143,6 +143,7 @@ app.post('/userapi', function(req, res, next) {
                 var command = command.split('%%name%%').join(req.user.username);
                 var command = command.split('%%id%%').join(req.user.id);
                 var command = command.split('%%email%%').join(req.user.email);
+                var command = command.split('%%mcnick%%').join(userdb[req.user.id]['mcnick']);
                 if(command != '' && command != null) {
                     eval(command);
                 }
@@ -170,6 +171,25 @@ app.post('/userapi', function(req, res, next) {
             res.json({ "code" : "error" , "message" : "Action query가 누락되었습니다." });
     }
     return;
+});
+
+app.get('/setmcnick', function(req, res, next) {
+    if(!req.isAuthenticated()) {
+        res.redirect('/login');
+        return;
+    }
+
+    const userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
+    const parsedUrl = url.parse(req.url);
+    const parsedQuery = querystring.parse(parsedUrl.query,'&','=');
+
+    if(userdb[req.params.id] == null) {
+        userdb[req.params.id] = {};
+    }
+
+    userdb[req.user.id]['mcnick'] = parsedQuery.mcnick;
+    fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
+    res.redirect('/');
 });
 
 module.exports = app;

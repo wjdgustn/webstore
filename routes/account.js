@@ -42,7 +42,7 @@ app.get(setting.DISCORD_CALLBACK_URL, passport.authenticate('discord', {
     parsedUrl = url.parse(req.url);
     parsedQuery = querystring.parse(parsedUrl.query,'&','=');
 
-    var userdb = JSON.parse(fs.readFileSync('./data/user/user.json'));
+    var userdb = JSON.parse(fs.readFileSync(setting.userdatapath));
     if(userdb[req.user.id] == null) {
         userdb[req.user.id] = {};
     }
@@ -55,7 +55,12 @@ app.get(setting.DISCORD_CALLBACK_URL, passport.authenticate('discord', {
     if(userdb[req.user.id]['permission_group'] == null) {
         userdb[req.user.id]['permission_group'] = ["user"];
     }
-    fs.writeFileSync('./data/user/user.json', JSON.stringify(userdb));
+    fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
+
+    if(userdb[req.user.id]['mcnick'] == null) {
+        res.redirect('/mcnick');
+        return;
+    }
 
     res.redirect('/');
     return;
