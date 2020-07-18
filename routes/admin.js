@@ -495,7 +495,7 @@ app.get('/edituserpermissiongroup/:id', function(req, res, next) {
         userdb[req.params.id] = {};
     }
 
-    userdb[req.params.id]['permission_group'] = parsedQuery.permission.split('\r\n');
+    userdb[req.params.id]['permission_group'] = parsedQuery.permission_group.split('\r\n');
 
     fs.writeFileSync(setting.userdatapath, JSON.stringify(userdb));
 
