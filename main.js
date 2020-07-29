@@ -8,6 +8,8 @@ const url = require('url');
 const passport = require('passport');
 const session = require('express-session');
 const fs = require('fs');
+const redis = require('redis');
+const RedisStore = require('connect-redis')(session);
 console.log('모듈을 불러왔습니다.\n');
 
 console.log('설정 불러오는 중...');
@@ -29,11 +31,28 @@ else {
     protocol = "http://";
 }
 
-app.use(session({
-    secret: setting.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}));
+if(setting.USE_REDIS) {
+    const client = redis.createClient({
+        host: setting.REDIS_HOST,
+        port: setting.REDIS_PORT,
+        password: setting.REDIS_PASSWORD,
+        logError: true
+    })
+
+    app.use(session({
+        secret: setting.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        store: new RedisStore({ client: client })
+    }));
+}
+else {
+    app.use(session({
+        secret: setting.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false
+    }));
+}
 
 app.use(passport.initialize());
 app.use(passport.session());
