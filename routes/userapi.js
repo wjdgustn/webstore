@@ -56,7 +56,7 @@ app.post('/userapi', function(req, res, next) {
                 res.json({ "code" : "error" , "message" : "잘못된 아이템 코드입니다." });
                 break;
             }
-            if(!(ProductById[parsedQuery.itemcode]['left_count'] > 0 || ProductById[parsedQuery.itemcode]['buy_limit'] == -1) || !utils.CountHistory(ProductById[parsedQuery.itemcode]['code']) < ProductById[parsedQuery.itemcode]['buy_limit_per_user']) {
+            if(!(ProductById[parsedQuery.itemcode]['left_count'] > 0 || ProductById[parsedQuery.itemcode]['buy_limit'] == -1) || !(utils.CountHistory(parsedQuery.itemcode) < ProductById[parsedQuery.itemcode]['buy_limit_per_user'] || ProductById[parsedQuery.itemcode]['buy_limit_per_user'] == -1)) {
                 res.json({ "code" : "error" , "message" : "잘못된 접근입니다.\n버그라고 생각된다면 관리자에게 문의하세요." });
                 break;
             }
